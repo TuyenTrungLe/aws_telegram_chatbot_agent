@@ -11,7 +11,13 @@ from telegram_agent_aws.infrastructure.clients.qdrant import get_qdrant_client
 @lru_cache(maxsize=1)
 def get_retriever_tool():
     """Get the retriever tool as a singleton using LRU cache."""
-    embeddings = OpenAIEmbeddings(model=settings.EMBEDDING_MODEL, api_key=settings.OPENAI_API_KEY)
+    embeddings = OpenAIEmbeddings(
+        model=settings.EMBEDDING_MODEL,
+        api_key=settings.llm_api_key,
+        base_url=settings.llm_base_url,
+        tiktoken_enabled=False,
+        check_embedding_ctx_length=False,
+    )
 
     vector_store = QdrantVectorStore(
         client=get_qdrant_client(),

@@ -5,6 +5,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 from telegram_agent_aws.application.conversation_service.generate_response import get_agent_response
+from telegram_agent_aws.config import settings
 from telegram_agent_aws.infrastructure.clients.elevenlabs import get_elevenlabs_client
 from telegram_agent_aws.infrastructure.clients.openai import get_openai_client
 
@@ -51,7 +52,7 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # Step 1: Get vision response
     vision_response = openai_client.chat.completions.create(
-        model="gpt-4o-mini",
+        model=settings.OPENAI_MODEL,
         messages=[
             {
                 "role": "user",

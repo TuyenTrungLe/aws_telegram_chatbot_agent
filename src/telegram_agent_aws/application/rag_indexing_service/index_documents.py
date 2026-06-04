@@ -20,7 +20,13 @@ def generate_split_documents():
 
 def index_documents():
     all_splits = generate_split_documents()
-    embeddings = OpenAIEmbeddings(model=settings.EMBEDDING_MODEL, api_key=settings.OPENAI_API_KEY)
+    embeddings = OpenAIEmbeddings(
+        model=settings.EMBEDDING_MODEL,
+        api_key=settings.llm_api_key,
+        base_url=settings.llm_base_url,
+        tiktoken_enabled=False,
+        check_embedding_ctx_length=False,
+    )
 
     QdrantVectorStore.from_documents(
         documents=all_splits,
@@ -28,6 +34,8 @@ def index_documents():
         url=settings.QDRANT_URL,
         api_key=settings.QDRANT_API_KEY,
         collection_name="telegram_agent_aws_collection",
+        timeout=120,
+        batch_size=4,
     )
 
     logger.info("Documents indexed successfully.")

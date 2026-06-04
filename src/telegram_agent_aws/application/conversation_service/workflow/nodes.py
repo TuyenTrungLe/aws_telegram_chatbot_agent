@@ -20,7 +20,7 @@ class RouterResponse(BaseModel):
 
 
 def router_node(state: TelegramAgentState):
-    llm = ChatOpenAI(model=settings.OPENAI_MODEL, api_key=settings.OPENAI_API_KEY)
+    llm = ChatOpenAI(model=settings.OPENAI_MODEL, api_key=settings.llm_api_key, base_url=settings.llm_base_url)
 
     sys_msg = SystemMessage(content=ROUTER_SYSTEM_PROMPT.prompt)
     llm_structured = llm.with_structured_output(RouterResponse)
@@ -38,7 +38,7 @@ def router_node(state: TelegramAgentState):
 
 
 def generate_text_response_node(state: TelegramAgentState):
-    llm = ChatOpenAI(model=settings.OPENAI_MODEL, api_key=settings.OPENAI_API_KEY)
+    llm = ChatOpenAI(model=settings.OPENAI_MODEL, api_key=settings.llm_api_key, base_url=settings.llm_base_url)
     llm_with_tools = llm.bind_tools([get_retriever_tool()])
 
     summary = state.get("summary", "")
@@ -56,7 +56,7 @@ def generate_text_response_node(state: TelegramAgentState):
 
 
 def summarize_conversation_node(state: TelegramAgentState):
-    llm = ChatOpenAI(model=settings.OPENAI_MODEL, api_key=settings.OPENAI_API_KEY)
+    llm = ChatOpenAI(model=settings.OPENAI_MODEL, api_key=settings.llm_api_key, base_url=settings.llm_base_url)
 
     summary = state.get("summary", "")
 
